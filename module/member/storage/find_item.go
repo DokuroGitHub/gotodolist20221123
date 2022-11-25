@@ -2,7 +2,7 @@ package storage
 
 import (
 	"context"
-	"gotodolist20221123/module/item/model"
+	"gotodolist20221123/module/member/model"
 
 	"gorm.io/gorm"
 )
@@ -10,8 +10,8 @@ import (
 func (s *mysqlStorage) FindItem(
 	ctx context.Context,
 	condition map[string]interface{},
-) (*model.ToDoItem, error) {
-	var itemData model.ToDoItem
+) (*model.Member, error) {
+	var itemData model.Member
 
 	if err := s.db.Where(condition).First(&itemData).Error; err != nil {
 		if err == gorm.ErrRecordNotFound { // data not found

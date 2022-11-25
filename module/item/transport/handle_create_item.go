@@ -1,4 +1,4 @@
-package todotrpt
+package transport
 
 import (
 	"net/http"
@@ -7,14 +7,14 @@ import (
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 
-	todoitembusiness "gotodolist20221123/module/item/business"
-	todoitemmodel "gotodolist20221123/module/item/model"
-	todostorage "gotodolist20221123/module/item/storage"
+	"gotodolist20221123/module/item/business"
+	"gotodolist20221123/module/item/model"
+	"gotodolist20221123/module/item/storage"
 )
 
-func HanleCreateNewItem(db *gorm.DB) gin.HandlerFunc {
+func HanleCreateItem(db *gorm.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		var dataItem todoitemmodel.ToDoItem
+		var dataItem model.ToDoItem
 
 		if err := c.ShouldBind(&dataItem); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -25,10 +25,10 @@ func HanleCreateNewItem(db *gorm.DB) gin.HandlerFunc {
 		dataItem.Title = strings.TrimSpace(dataItem.Title)
 
 		// setup dependencies
-		storage := todostorage.NewMySQLStorage(db)
-		biz := todoitembusiness.NewCreateToDoItemBiz(storage)
+		storage := storage.NewMySQLStorage(db)
+		business := business.NewCreateItemBusiness(storage)
 
-		if err := biz.CreateNewItem(c.Request.Context(), &dataItem); err != nil {
+		if err := business.CreateItem(c.Request.Context(), &dataItem); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}

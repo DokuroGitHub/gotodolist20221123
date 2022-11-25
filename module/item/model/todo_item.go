@@ -1,4 +1,4 @@
-package todoitemmodel
+package model
 
 import (
 	"errors"
@@ -10,6 +10,14 @@ var (
 	ErrItemNotFound             = errors.New("item not found")
 	ErrCannotUpdateFinishedItem = errors.New("can not update finished item")
 )
+
+/*
+  `id` int NOT NULL AUTO_INCREMENT,
+  `title` varchar(150) CHARACTER SET utf8 NOT NULL,
+  `status` enum('Doing','Finished') DEFAULT 'Doing',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL ON UPDATE CURRENT_TIMESTAMP,
+*/
 
 type ToDoItem struct {
 	Id        int        `json:"id" gorm:"column:id;"`

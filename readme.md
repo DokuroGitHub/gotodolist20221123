@@ -11,11 +11,11 @@ CREATE TABLE `todo_items` (
 ```
 
 # Docker MySQL
-```docker
+```bash
 docker run -d --name demo-mysql -p 8001:3306 -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=todo_db mysql:8.0
 ```
 # Login MySQL
-```docker
+```bash
 docker exec -it demo-mysql mysql -u root -p todo_db
 ```
 

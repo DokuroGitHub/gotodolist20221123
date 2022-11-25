@@ -1,14 +1,14 @@
-package todostorage
+package storage
 
 import (
 	"context"
-	todoitemmodel "gotodolist20221123/module/item/model"
+	"gotodolist20221123/module/member/model"
 )
 
 func (s *mysqlStorage) UpdateItem(
 	ctx context.Context,
 	condition map[string]interface{},
-	dataUpdate *todoitemmodel.ToDoItem,
+	dataUpdate *model.Member,
 ) error {
 	if err := s.db.Where(condition).Updates(dataUpdate).Error; err != nil {
 		return err

@@ -5,14 +5,12 @@ import (
 	"gotodolist20221123/module/item/model"
 )
 
-func (s *mysqlStorage) DeleteItem(
+func (s *mysqlStorage) UpdateItem(
 	ctx context.Context,
 	condition map[string]interface{},
+	dataUpdate *model.ToDoItem,
 ) error {
-
-	if err := s.db.
-		Table(model.ToDoItem{}.TableName()).
-		Where(condition).Delete(nil).Error; err != nil {
+	if err := s.db.Where(condition).Updates(dataUpdate).Error; err != nil {
 		return err
 	}
 

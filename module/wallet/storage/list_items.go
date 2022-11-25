@@ -2,19 +2,19 @@ package storage
 
 import (
 	"context"
-	"gotodolist20221123/module/item/model"
+	"gotodolist20221123/module/wallet/model"
 )
 
 func (s *mysqlStorage) ListItems(
 	ctx context.Context,
 	condition map[string]interface{},
 	paging *model.DataPaging,
-) ([]model.ToDoItem, error) {
+) ([]model.Wallet, error) {
 	offset := (paging.Page - 1) * paging.Limit
 
-	var result []model.ToDoItem
+	var result []model.Wallet
 
-	if err := s.db.Table(model.ToDoItem{}.TableName()).
+	if err := s.db.Table(model.Wallet{}.TableName()).
 		Where(condition).
 		Limit(paging.Limit).
 		Count(&paging.Total).

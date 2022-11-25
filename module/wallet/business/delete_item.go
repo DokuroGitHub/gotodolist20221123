@@ -2,14 +2,14 @@ package business
 
 import (
 	"context"
-	"gotodolist20221123/module/item/model"
+	"gotodolist20221123/module/wallet/model"
 )
 
 type DeleteItemStorage interface {
 	FindItem(
 		ctx context.Context,
 		condition map[string]interface{},
-	) (*model.ToDoItem, error)
+	) (*model.Wallet, error)
 
 	DeleteItem(
 		ctx context.Context,
@@ -21,7 +21,7 @@ type deleteItemBusiness struct {
 	storage DeleteItemStorage
 }
 
-func NewDeleteItemBusiness(storage DeleteItemStorage) *deleteItemBusiness {
+func NewDeleteBusiness(storage DeleteItemStorage) *deleteItemBusiness {
 	return &deleteItemBusiness{storage: storage}
 }
 

@@ -1,4 +1,4 @@
-package todotrpt
+package transport
 
 import (
 	"net/http"
@@ -7,10 +7,11 @@ import (
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 
-	todoitembusiness "gotodolist20221123/module/item/business"
-	todostorage "gotodolist20221123/module/item/storage"
+	"gotodolist20221123/module/item/business"
+	"gotodolist20221123/module/item/storage"
 )
-func HandleFindAnItem(db *gorm.DB) gin.HandlerFunc {
+
+func HandleFindItem(db *gorm.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		id, err := strconv.Atoi(c.Param("id"))
 
@@ -19,10 +20,10 @@ func HandleFindAnItem(db *gorm.DB) gin.HandlerFunc {
 			return
 		}
 
-		storage := todostorage.NewMySQLStorage(db)
-		biz := todoitembusiness.NewFindToDoItemBiz(storage)
+		storage := storage.NewMySQLStorage(db)
+		business := business.NewFindItemBusiness(storage)
 
-		data, err := biz.FindAnItem(c.Request.Context(), map[string]interface{}{"id": id})
+		data, err := business.FindItem(c.Request.Context(), map[string]interface{}{"id": id})
 
 		if err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})

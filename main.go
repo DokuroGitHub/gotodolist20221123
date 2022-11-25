@@ -11,6 +11,8 @@ import (
 
 	///
 	todotrpt "gotodolist20221123/module/item/transport"
+	membertrpt "gotodolist20221123/module/member/transport"
+	wallettrpt "gotodolist20221123/module/wallet/transport"
 )
 
 func main() {
@@ -19,6 +21,7 @@ func main() {
 
 	if !ok {
 		// log.Fatalln("Missing MySQL connection string.")
+		log.Println("Missing MySQL connection string.")
 		mysqlConnStr = "root:root@tcp(127.0.0.1:8001)/todo_db?charset=utf8mb4&parseTime=True&loc=Local"
 	}
 
@@ -35,11 +38,24 @@ func main() {
 
 	v1 := router.Group("/v1")
 	{
-		v1.POST("/items", todotrpt.HanleCreateNewItem(db))       // create item
+		// todo_items
+		v1.POST("/items", todotrpt.HanleCreateItem(db))          // create item
 		v1.GET("/items", todotrpt.HandleListItem(db))            // list items
-		v1.GET("/items/:id", todotrpt.HandleFindAnItem(db))      // get an item by ID
-		v1.PUT("/items/:id", todotrpt.HandleUpdateAnItem(db))    // edit an item by ID
+		v1.GET("/items/:id", todotrpt.HandleFindItem(db))        // get an item by ID
+		v1.PUT("/items/:id", todotrpt.HandleUpdateItem(db))      // edit an item by ID
 		v1.DELETE("/items/:id", todotrpt.HandleDeleteAnItem(db)) // delete an item by ID
+		// wallets
+		v1.POST("/wallets", wallettrpt.HanleCreateItem(db))        // create item
+		v1.GET("/wallets", wallettrpt.HandleListItems(db))         // list items
+		v1.GET("/wallets/:id", wallettrpt.HandleFindItem(db))      // get an item by ID
+		v1.PUT("/wallets/:id", wallettrpt.HandleUpdateItem(db))    // edit an item by ID
+		v1.DELETE("/wallets/:id", wallettrpt.HandleDeleteItem(db)) // delete an item by ID
+		// members
+		v1.POST("/members", membertrpt.HanleCreateItem(db))              // create item
+		v1.GET("/members", membertrpt.HandleListItems(db))               // list items
+		v1.GET("/members/:username", membertrpt.HandleFindItem(db))      // get an item by username
+		v1.PUT("/members/:username", membertrpt.HandleUpdateItem(db))    // edit an item by username
+		v1.DELETE("/members/:username", membertrpt.HandleDeleteItem(db)) // delete an item by username
 	}
 
 	router.Run()

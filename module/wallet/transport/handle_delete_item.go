@@ -1,4 +1,4 @@
-package todotrpt
+package transport
 
 import (
 	"net/http"
@@ -7,11 +7,11 @@ import (
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 
-	todoitembusiness "gotodolist20221123/module/item/business"
-	todostorage "gotodolist20221123/module/item/storage"
+	"gotodolist20221123/module/wallet/business"
+	"gotodolist20221123/module/wallet/storage"
 )
 
-func HandleDeleteAnItem(db *gorm.DB) gin.HandlerFunc {
+func HandleDeleteItem(db *gorm.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		id, err := strconv.Atoi(c.Param("id"))
 
@@ -21,10 +21,10 @@ func HandleDeleteAnItem(db *gorm.DB) gin.HandlerFunc {
 		}
 
 		// setup dependencies
-		storage := todostorage.NewMySQLStorage(db)
-		biz := todoitembusiness.NewDeleteToDoItemBiz(storage)
+		storage := storage.NewMySQLStorage(db)
+		business := business.NewDeleteBusiness(storage)
 
-		if err := biz.DeleteItem(c.Request.Context(), map[string]interface{}{"id": id}); err != nil {
+		if err := business.DeleteItem(c.Request.Context(), map[string]interface{}{"id": id}); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}

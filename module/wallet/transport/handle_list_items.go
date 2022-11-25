@@ -6,12 +6,12 @@ import (
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 
-	"gotodolist20221123/module/item/business"
-	"gotodolist20221123/module/item/model"
-	"gotodolist20221123/module/item/storage"
+	"gotodolist20221123/module/wallet/business"
+	"gotodolist20221123/module/wallet/model"
+	"gotodolist20221123/module/wallet/storage"
 )
 
-func HandleListItem(db *gorm.DB) gin.HandlerFunc {
+func HandleListItems(db *gorm.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var paging model.DataPaging
 

@@ -1,4 +1,4 @@
-package todotrpt
+package transport
 
 import (
 	"net/http"
@@ -7,12 +7,12 @@ import (
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 
-	todobiz "gotodolist20221123/module/item/business"
-	todomodel "gotodolist20221123/module/item/model"
-	todostorage "gotodolist20221123/module/item/storage"
+	"gotodolist20221123/module/wallet/business"
+	"gotodolist20221123/module/wallet/model"
+	"gotodolist20221123/module/wallet/storage"
 )
 
-func HandleUpdateAnItem(db *gorm.DB) gin.HandlerFunc {
+func HandleUpdateItem(db *gorm.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		id, err := strconv.Atoi(c.Param("id"))
 
@@ -21,17 +21,17 @@ func HandleUpdateAnItem(db *gorm.DB) gin.HandlerFunc {
 			return
 		}
 
-		var dataItem todomodel.ToDoItem
+		var dataItem model.Wallet
 
 		if err := c.ShouldBind(&dataItem); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
 
-		storage := todostorage.NewMySQLStorage(db)
-		biz := todobiz.NewUpdateToDoItemBiz(storage)
+		storage := storage.NewMySQLStorage(db)
+		business := business.NewUpdateItemBusiness(storage)
 
-		if err := biz.UpdateItem(c.Request.Context(), map[string]interface{}{"id": id}, &dataItem); err != nil {
+		if err := business.UpdateItem(c.Request.Context(), map[string]interface{}{"id": id}, &dataItem); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
