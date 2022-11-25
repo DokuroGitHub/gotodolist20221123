@@ -20,4 +20,8 @@ godoc --http :6060
 # Get dependencies
 go get .
 # Run
+```go
+sh
+MYSQL_CONNECTION="root:root@tcp(127.0.0.1:8001)/todo_db?charset=utf8mb4&parseTime=True&loc=Local"
 go run .
+```
