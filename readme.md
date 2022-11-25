@@ -1,4 +1,5 @@
 # MySQL
+```sql
 CREATE TABLE `todo_items` (
   `id` int NOT NULL AUTO_INCREMENT,
   `title` varchar(150) CHARACTER SET utf8 NOT NULL,
@@ -7,6 +8,7 @@ CREATE TABLE `todo_items` (
   `updated_at` timestamp NOT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+```
 
 # Docker MySQL
 docker run -d --name demo-mysql -p 8001:3306 -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=todo_db mysql:8.0
