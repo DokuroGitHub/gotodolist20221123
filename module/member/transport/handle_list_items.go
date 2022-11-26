@@ -2,9 +2,9 @@ package transport
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -20,18 +20,17 @@ func HandleListItems(db *gorm.DB) gin.HandlerFunc {
 		limit, limitErr := strconv.Atoi(params.Get("limit"))
 		page, pageErr := strconv.Atoi(params.Get("page"))
 		where := params.Get("where")
-		order := params.Get("order")
+		sort := params.Get("sort")
 
-		var paging model.DataPaging
-
-		_condition := map[string]interface{}{}
-		_order := map[string]bool{}
+		var _paging model.DataPaging
+		var _condition map[string]interface{}
+		var _order string
 
 		if limitErr != nil && limit > -1 {
-			paging.Limit = limit
+			_paging.Limit = limit
 		}
 		if pageErr != nil && page > 0 {
-			paging.Page = page
+			_paging.Page = page
 		}
 		if where != "" {
 			_temp := map[string]interface{}{}
@@ -39,32 +38,27 @@ func HandleListItems(db *gorm.DB) gin.HandlerFunc {
 				_condition = _temp
 			}
 		}
-		if order != "" {
-			_temp := map[string]bool{}
-			if err := json.Unmarshal([]byte(order), &_temp); err == nil {
-				_order = _temp
-			}
+		if sort != "" {
+			_order = strings.ReplaceAll(sort, ":", " ")
 		}
 
-		fmt.Println(order)
-		fmt.Println(_order)
-		if err := c.ShouldBind(&paging); err != nil {
+		if err := c.ShouldBind(&_paging); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
 
-		paging.Process()
+		_paging.Process()
 
 		storage := storage.NewMySQLStorage(db)
 		business := business.NewListItemsBusiness(storage)
 
-		result, limitErr := business.ListItems(c.Request.Context(), _condition, &paging, _order)
+		result, limitErr := business.ListItems(c.Request.Context(), _condition, &_paging, _order)
 
 		if limitErr != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": limitErr.Error()})
 			return
 		}
 
-		c.JSON(http.StatusOK, gin.H{"data": result, "paging": paging})
+		c.JSON(http.StatusOK, gin.H{"data": result, "paging": _paging})
 	}
 }

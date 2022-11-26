@@ -40,7 +40,7 @@ func main() {
 	{
 		// todo_items
 		v1.POST("/items", todotrpt.HanleCreateItem(db))          // create item
-		v1.GET("/items", todotrpt.HandleListItem(db))            // list items
+		v1.GET("/items", todotrpt.HandleListItems(db))           // list items
 		v1.GET("/items/:id", todotrpt.HandleFindItem(db))        // get an item by ID
 		v1.PUT("/items/:id", todotrpt.HandleUpdateItem(db))      // edit an item by ID
 		v1.DELETE("/items/:id", todotrpt.HandleDeleteAnItem(db)) // delete an item by ID

@@ -8,8 +8,11 @@ import (
 type ListItemsStorage interface {
 	ListItems(
 		ctx context.Context,
-		condition map[string]interface{},
+		where map[string]interface{},
+		not map[string]interface{},
+		or map[string]interface{},
 		paging *model.DataPaging,
+		order string,
 	) ([]model.Wallet, error)
 }
 
@@ -21,11 +24,15 @@ func NewListItemsBusiness(storage ListItemsStorage) *listItemsBusiness {
 	return &listItemsBusiness{storage: storage}
 }
 
-func (business *listItemsBusiness) ListItems(ctx context.Context,
-	condition map[string]interface{},
+func (business *listItemsBusiness) ListItems(
+	ctx context.Context,
+	where map[string]interface{},
+	not map[string]interface{},
+	or map[string]interface{},
 	paging *model.DataPaging,
+	order string,
 ) ([]model.Wallet, error) {
-	result, err := business.storage.ListItems(ctx, condition, paging)
+	result, err := business.storage.ListItems(ctx, where, not, or, paging, order)
 
 	if err != nil {
 		return nil, err

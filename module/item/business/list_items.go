@@ -10,6 +10,7 @@ type ListItemsStorage interface {
 		ctx context.Context,
 		condition map[string]interface{},
 		paging *model.DataPaging,
+		order string,
 	) ([]model.ToDoItem, error)
 }
 
@@ -24,8 +25,9 @@ func NewListItemsBusiness(storage ListItemsStorage) *listItemsBusiness {
 func (business *listItemsBusiness) ListItems(ctx context.Context,
 	condition map[string]interface{},
 	paging *model.DataPaging,
+	order string,
 ) ([]model.ToDoItem, error) {
-	result, err := business.storage.ListItems(ctx, condition, paging)
+	result, err := business.storage.ListItems(ctx, condition, paging, order)
 
 	if err != nil {
 		return nil, err
